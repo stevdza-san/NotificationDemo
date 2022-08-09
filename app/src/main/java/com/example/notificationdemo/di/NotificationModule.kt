@@ -2,13 +2,15 @@ package com.example.notificationdemo.di
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE
-import androidx.core.app.NotificationCompat.VISIBILITY_SECRET
 import androidx.core.app.NotificationManagerCompat
 import com.example.notificationdemo.R
+import com.example.notificationdemo.receiver.MyReceiver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,6 +27,21 @@ object NotificationModule {
     fun provideNotificationBuilder(
         @ApplicationContext context: Context
     ): NotificationCompat.Builder {
+        val intent = Intent(context, MyReceiver::class.java).apply {
+            putExtra("MESSAGE", "Clicked!")
+        }
+        val flag =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                PendingIntent.FLAG_IMMUTABLE
+            else
+                0
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            0,
+            intent,
+            flag
+        )
+
         return NotificationCompat.Builder(context, "Main Channel ID")
             .setContentTitle("Welcome")
             .setContentText("YouTube Channel: Stevdza-San")
@@ -37,6 +54,7 @@ object NotificationModule {
                     .setContentText("Unlock to see the message.")
                     .build()
             )
+            .addAction(0, "ACTION", pendingIntent)
     }
 
     @Singleton
