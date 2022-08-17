@@ -3,13 +3,18 @@ package com.example.notificationdemo.di
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.VISIBILITY_PRIVATE
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
+import com.example.notificationdemo.MainActivity
 import com.example.notificationdemo.R
+import com.example.notificationdemo.navigation.MY_ARG
+import com.example.notificationdemo.navigation.MY_URI
 import com.example.notificationdemo.receiver.MyReceiver
 import dagger.Module
 import dagger.Provides
@@ -41,7 +46,16 @@ object NotificationModule {
             intent,
             flag
         )
-
+        val clickIntent = Intent(
+            Intent.ACTION_VIEW,
+            "$MY_URI/$MY_ARG=Coming from Notification".toUri(),
+            context,
+            MainActivity::class.java
+        )
+        val clickPendingIntent: PendingIntent = TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(clickIntent)
+            getPendingIntent(1, flag)
+        }
         return NotificationCompat.Builder(context, "Main Channel ID")
             .setContentTitle("Welcome")
             .setContentText("YouTube Channel: Stevdza-San")
@@ -55,6 +69,7 @@ object NotificationModule {
                     .build()
             )
             .addAction(0, "ACTION", pendingIntent)
+            .setContentIntent(clickPendingIntent)
     }
 
     @Singleton
