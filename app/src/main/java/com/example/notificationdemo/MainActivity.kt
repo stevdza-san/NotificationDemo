@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import com.example.notificationdemo.navigation.SetupNavGraph
-import com.example.notificationdemo.screen.MainScreen
 import com.example.notificationdemo.ui.theme.NotificationDemoTheme
 import dagger.hilt.android.AndroidEntryPoint
 
