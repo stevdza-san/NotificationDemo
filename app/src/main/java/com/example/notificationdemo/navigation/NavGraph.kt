@@ -22,7 +22,7 @@ fun SetupNavGraph(
         startDestination = Screen.Main.route
     ) {
         composable(route = Screen.Main.route) {
-            MainScreen(navController = navController)
+            MainScreen()
         }
         composable(
             route = Screen.Details.route,
